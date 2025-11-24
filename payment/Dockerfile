@@ -20,6 +20,8 @@ RUN pip3 install --no-cache-dir uwsgi
 FROM python:3.9-slim
 WORKDIR /opt/server
 
+# Copy python packages + binaries
+COPY --from=build /usr/local /usr/local
 COPY --from=build /opt/server /opt/server
 
 # Create service user
