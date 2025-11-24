@@ -1,6 +1,10 @@
 FROM python:3.9-slim AS build
 WORKDIR /opt/server
 
+# Install compiler tools
+RUN apt-get update && apt-get install -y \
+    gcc python3-dev build-essential
+
 # Copy app files
 COPY payment.ini .
 COPY *.py .
