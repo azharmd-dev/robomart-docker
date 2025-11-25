@@ -12,21 +12,19 @@ RUN npm install
 # -------------------------
 FROM node:20.19.5-alpine3.22              
 WORKDIR /opt/server                        
-COPY --from=build /opt/server /opt/server 
 
 # Create roboshop user & group (non-root best practice)
-RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
+RUN addgroup -S roboshop && \ 
+    adduser -S roboshop -G roboshop && \
+    chown -R roboshop:roboshop /opt/server
 
 # App environment variables
 ENV MONGO="true" \
     MONGO_URL="mongodb://mongodb:27017/catalogue"
 
-# Give ownership to roboshop user
-RUN chown -R roboshop:roboshop /opt/server
-
+COPY --from=build /opt/server /opt/server 
 # Switch to non-root user
 USER roboshop                             
-
 CMD [ "node", "server.js" ]               
 
 
